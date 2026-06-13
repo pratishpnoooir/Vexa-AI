@@ -1,4 +1,5 @@
 streamlit
 langchain-core
 langchain-text-splitters
+langchain-ollama
 chromadb
