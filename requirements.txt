@@ -3,4 +3,7 @@ langchain-core
 langchain-text-splitters
 langchain-ollama
 langchain-community
+sentence-transformers
+sentencepiece
 chromadb
+
