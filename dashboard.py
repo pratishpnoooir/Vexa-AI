@@ -149,4 +149,6 @@ with tab_chat:
     
     # Setup session chat history container arrays if empty
     if "messages" not in st.session_state:
-        st.session_state.messages =
+        [SECURITY] Matrix firewalls set to default adaptive defensive postures.
+[READY] Standing by for master admin operations...
+    """, language="bash")
