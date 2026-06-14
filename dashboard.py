@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # ----------------------------------------------------
-# 2. VEXA TACTICAL THEME & CORE ANIMATION (CSS)
+# 2. VEXA TACTICAL OPERATIONS THEME (CSS)
 # ----------------------------------------------------
 st.markdown("""
     <style>
@@ -55,26 +55,27 @@ st.markdown("""
 
     /* Vexa Core Matrix Pulsing Animation */
     .vexa-core {
-        width: 110px;
-        height: 110px;
+        width: 90px;
+        height: 90px;
         border: 3px solid #00f0ff;
         border-radius: 50%;
-        margin: 25px auto;
+        margin: 10px auto;
         box-shadow: 0 0 15px #00f0ff, inset 0 0 15px #00f0ff;
         animation: corePulse 2s infinite alternate;
     }
 
     @keyframes corePulse {
-        0% { 
-            transform: scale(0.95); 
-            box-shadow: 0 0 12px #00f0ff, inset 0 0 10px #00f0ff; 
-            opacity: 0.65; 
-        }
-        100% { 
-            transform: scale(1.05); 
-            box-shadow: 0 0 28px #00f0ff, inset 0 0 18px #00f0ff; 
-            opacity: 1; 
-        }
+        0% { transform: scale(0.92); box-shadow: 0 0 12px #00f0ff, inset 0 0 10px #00f0ff; opacity: 0.65; }
+        100% { transform: scale(1.03); box-shadow: 0 0 25px #00f0ff, inset 0 0 18px #00f0ff; opacity: 1; }
+    }
+
+    /* Cyber News Feed Box Container */
+    .news-panel {
+        background-color: #15191e;
+        border: 1px solid #ff3333;
+        border-radius: 5px;
+        padding: 10px;
+        box-shadow: 0 0 10px rgba(255, 51, 51, 0.2);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -85,23 +86,20 @@ st.markdown("""
 def vexa_speak(text):
     """Injects native browser JavaScript to read the AI text response out loud as Vexa."""
     if text:
-        # Sanitize text for JavaScript delivery
         clean_text = text.replace('"', '\\"').replace('\n', ' ')
         js_speech = f"""
         <script>
             var msg = new SpeechSynthesisUtterance("{clean_text}");
-            window.speechSynthesis.cancel(); // Flush old audio queues
-            
+            window.speechSynthesis.cancel(); 
             var voices = window.speechSynthesis.getVoices();
             for(var i = 0; i < voices.length; i++) {{
-                // Fallback loops to grab a sharp, clear female assistant profile
                 if(voices[i].name.includes("Google UK English Female") || voices[i].name.includes("Zira") || voices[i].name.includes("Female")) {{
                     msg.voice = voices[i];
                     break;
                 }}
             }}
-            msg.rate = 1.05; // Quick processing pace
-            msg.pitch = 1.0;  // Balanced response frequencies
+            msg.rate = 1.05; 
+            msg.pitch = 1.0;  
             window.speechSynthesis.speak(msg);
         </script>
         """
@@ -127,30 +125,56 @@ tab_chat, tab_scanner, tab_live = st.tabs([
 ])
 
 # ====================================================
-# TAB 1: VEXA AI INTERACTION TERMINAL
+# TAB 1: VEXA AI INTERACTION TERMINAL (DYNAMIC GRID)
 # ====================================================
 with tab_chat:
-    # Render the pulsing center-stage matrix
-    st.markdown('<div class="vexa-core"></div>', unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center; color: #00f0ff;'>VEXA CORE DIRECT ACCESS</h3>", unsafe_allow_html=True)
     
-    # Jarvis-style audio capturing block
+    # Create a layout grid: Left column for Map & Chat, Right column for Core & News Info
+    col_left, col_right = st.columns([2, 1])
+    
+    with col_left:
+        st.markdown("<h2 style='color: #00f0ff; margin-bottom: 0;'>🛰️ GLOBAL THREAT TELEMETRY MAP</h2>", unsafe_allow_html=True)
+        
+        # Simulated Geolocation coordinate mapping data matrix (Centered near your operating region)
+        map_data = {
+            'lat': [8.5241, 8.5400, 8.5000],
+            'lon': [76.9366, 76.9000, 76.9600]
+        }
+        st.map(map_data, zoom=11, use_container_width=True)
+        
+    with col_right:
+        # Top Right: Interactive Intelligence News Channel Feed Terminal
+        st.markdown("""
+            <div class='news-panel'>
+                <h4 style='color: #ff3333; margin-top:0; margin-bottom:5px;'>🚨 INTEL NEWS CHANNELS</h4>
+                <p style='font-size: 11px; color: #ffffff; margin: 2px 0;'>⚠️ <b>[GLOBAL]</b> Zero-day exploit patch pushed to main Linux server hubs.</p>
+                <p style='font-size: 11px; color: #ffffff; margin: 2px 0;'>🛑 <b>[LOCAL]</b> Subnet sweep flagged 0 malicious intercept arrays.</p>
+                <p style='font-size: 11px; color: #ffffff; margin: 2px 0;'>⚡ <b>[VEXA]</b> Neural mainframe routing optimized on Python 3.12 layer.</p>
+            </div>
+        """, unsafe_allow_html=True)
+        
+        # Mid Right: The glowing AI power matrix animation
+        st.markdown('<div class="vexa-core"></div>', unsafe_allow_html=True)
+        st.markdown("<p style='text-align: center; color: #00f0ff; font-weight: bold; font-size:12px;'>VEXA CORE MATRIX</p>", unsafe_allow_html=True)
+
+    st.write("---")
+    
+    # Voice intake node row
     st.subheader("🎙️ Vexa Voice Terminal Intercom")
     audio_command = st.audio_input("Initialize Vexa Audio Uplink")
     
     if audio_command:
         st.info("⚡ Audio packet successfully intercepted by Vexa.")
         audio_bytes = audio_command.read()
-        # Visual alert indicating the telemetry path is active
         st.warning("🤖 Audio data buffered! Link a Cloud API Key to stream voice conversions natively.")
-        
+
     st.write("---")
     st.subheader("💬 Tactical Text Terminal")
     
     # Setup session chat history container arrays if empty
     if "messages" not in st.session_state:
         st.session_state.messages = [
-            {"role": "assistant", "content": "System initialization complete. I am Vexa. Standing by for administrative input."}
+            {"role": "assistant", "content": "System initialization complete. Live matrix operational. I am Vexa. Standing by for database commands."}
         ]
         
     # Render historical log frames onto UI
@@ -158,22 +182,31 @@ with tab_chat:
         with st.chat_message(msg["role"]):
             st.write(msg["content"])
             
-    # Capture fresh input string fields
+    # Capture fresh input prompts and connect to live background logic engine paths
     if user_prompt := st.chat_input("Input encryption string..."):
         with st.chat_message("user"):
             st.write(user_prompt)
         st.session_state.messages.append({"role": "user", "content": user_prompt})
         
-        # Simulated response wrapper
         with st.chat_message("assistant"):
             response_placeholder = st.empty()
-            mock_reply = f"Acknowledged request: '{user_prompt}'. Processing algorithmic security pipelines."
-            response_placeholder.write(mock_reply)
+            with st.spinner("Vexa parsing core database logs..."):
+                try:
+                    # Dynamically call your real local processing brain
+                    from brain import ai, vector_store
+                    context_docs = vector_store.similarity_search(user_prompt, k=2)
+                    context_text = "\n".join([doc.page_content for doc in context_docs])
+                    
+                    full_system_prompt = f"You are Vexa, a highly advanced cybernetic defense intelligence system. Context:\n{context_text}"
+                    actual_reply = ai.predict(f"{full_system_prompt}\n\nUser Question: {user_prompt}")
+                except Exception:
+                    # Adaptive cloud environment fallback string
+                    actual_reply = f"Neural pipeline online. Processing: '{user_prompt}'. Standby for deep system vector integration."
             
-        st.session_state.messages.append({"role": "assistant", "content": mock_reply})
-        
-        # Fire voice protocol sequence instantly
-        vexa_speak(mock_reply)
+            response_placeholder.write(actual_reply)
+            
+        st.session_state.messages.append({"role": "assistant", "content": actual_reply})
+        vexa_speak(actual_reply)
 
 # ====================================================
 # TAB 2: DEFENSIVE CORE NETWORK SCANNER
