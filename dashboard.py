@@ -120,7 +120,7 @@ tab_chat, tab_scanner, tab_live = st.tabs([
 # ====================================================
 with tab_chat:
     
-    # Create a layout grid: Left column for Map, Right column for Live Video Feed & Core Matrix
+    # Create a layout grid: Left column for Map, Right column for Live Video Selector & Core Matrix
     col_left, col_right = st.columns([2, 1])
     
     with col_left:
@@ -134,11 +134,35 @@ with tab_chat:
         st.map(map_data, zoom=11, use_container_width=True)
         
     with col_right:
-        # Top Right: Live Operations Intelligence Video Feed
-        st.markdown("<h4 style='color: #ff3333; margin-top:0; margin-bottom:10px;'>📡 LIVE INTEL FEED</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='color: #ff3333; margin-top:0; margin-bottom:5px;'>📡 LIVE INTEL MONITOR</h4>", unsafe_allow_html=True)
         
-        # Embeds a live media news broadcast stream framework
-        st.video("https://www.youtube.com/watch?v=NX6w87qY0_M")  
+        # Complete collection of all requested YouTube news live channels
+        news_channels = {
+            "24 News Live (Malayalam)": "https://www.youtube.com/watch?v=1wECsnGZcfc",
+            "ABC News Live": "https://www.youtube.com/watch?v=kQXggaqbAUQ",
+            "Al Jazeera English Live": "https://www.youtube.com/watch?v=gCNeDWCI0vo",
+            "Asianet News Live (Malayalam)": "https://www.youtube.com/watch?v=s0LLVQeMmtU",
+            "DW News Live": "https://www.youtube.com/watch?v=v76P9T_tHfk",
+            "Fox News (Highlights/Live)": "https://www.youtube.com/watch?v=NX6w87qY0_M",
+            "France 24 English Live": "https://www.youtube.com/watch?v=HvZt-nh9sGg",
+            "LiveNOW from FOX": "https://www.youtube.com/watch?v=C96oohpWBGw",
+            "Manorama News Live (Malayalam)": "https://www.youtube.com/watch?v=tgBTspqA5nY",
+            "Mathrubhumi News Live (Malayalam)": "https://www.youtube.com/watch?v=0wGkPLjeOOA",
+            "NBC News NOW": "https://www.youtube.com/watch?v=KPVvNNDycW4",
+            "NDTV 24x7 Live": "https://www.youtube.com/watch?v=uoK1dFpMo98",
+            "Sky News Live": "https://www.youtube.com/watch?v=YDvsBbKfLPA",
+            "WION Live News": "https://www.youtube.com/watch?v=vfszY1JYbMc"
+        }
+        
+        # Scrollable dropdown drawer selection mechanism
+        selected_channel = st.selectbox(
+            "Select Intel Transponder Route:",
+            options=list(news_channels.keys()),
+            label_visibility="collapsed"
+        )
+        
+        # Renders the live media container frame mapped to the chosen stream channel asset
+        st.video(news_channels[selected_channel])  
         
         st.markdown("---")
         
