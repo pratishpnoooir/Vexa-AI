@@ -1,4 +1,40 @@
 import streamlit as st
+# Inject custom CSS to style the app like a Stark Industries UI terminal
+st.markdown("""
+    <style>
+    /* Main body background - Pitch Black */
+    .stApp {
+        background-color: #0d0f12;
+        color: #00f0ff;
+    }
+    
+    /* Sidebar styling */
+    section[data-testid="stSidebar"] {
+        background-color: #15191e !important;
+        border-right: 2px solid #00f0ff;
+    }
+    
+    /* Input bars and Text areas */
+    .stTextInput>div>div>input, .stTextArea>div>div>textarea {
+        background-color: #1a1f26 !important;
+        color: #00f0ff !important;
+        border: 1px solid #00f0ff !important;
+    }
+    
+    /* Custom buttons - Glowing Cyan */
+    div.stButton > button:first-child {
+        background-color: #00f0ff !important;
+        color: #0d0f12 !important;
+        font-weight: bold;
+        border-radius: 5px;
+        box-shadow: 0 0 10px #00f0ff;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+
+
+
 import os
 import socket
 from datetime import datetime
@@ -83,7 +119,51 @@ with st.sidebar:
             for b in bandit_files: st.caption(f"🏴‍☠️ bandit_notes/{b}")
 
 # 3. Main Workspace Layout (Using Tabs)
+# ==========================================
+# PLACE THE NEW CSS STYLING RIGHT HERE:
+# ==========================================
+st.markdown("""
+    <style>
+    .stApp {
+        background-color: #0d0f12;
+        color: #00f0ff;
+    }
+    section[data-testid="stSidebar"] {
+        background-color: #15191e !important;
+        border-right: 2px solid #00f0ff;
+    }
+    .stTextInput>div>div>input, .stTextArea>div>div>textarea {
+        background-color: #1a1f26 !important;
+        color: #00f0ff !important;
+        border: 1px solid #00f0ff !important;
+    }
+    div.stButton > button:first-child {
+        background-color: #00f0ff !important;
+        color: #0d0f12 !important;
+        font-weight: bold;
+        border-radius: 5px;
+        box-shadow: 0 0 10px #00f0ff;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# This is your original layout line:
 tab_chat, tab_scanner, tab_live = st.tabs(["⚡ VexaAI AI Engine", "🔍 Core Network Scanner", "📟 Live Log Stream"])
+
+# ==========================================
+# PLACE THE VOICE INTERCOM LOGIC RIGHT HERE:
+# ==========================================
+with tab_chat:
+    st.subheader("🎙️ Jarvis Voice Terminal Intercom")
+    audio_command = st.audio_input("Initialize Voice Input Sequence")
+    
+    if audio_command:
+        st.info("⚡ Audio packet successfully intercepted.")
+        audio_bytes = audio_command.read()
+        st.warning("🤖 Audio data received! Let's link a cloud brain API key to process this.")
+    
+    st.write("---")
+    # Your existing chatbot code (the text input, the chat history loop, etc.) goes right here!
 
 # --- TAB 1: DUAL-ENGINE AI CHATBOX ---
 with tab_chat:
