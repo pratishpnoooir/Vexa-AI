@@ -68,15 +68,6 @@ st.markdown("""
         0% { transform: scale(0.92); box-shadow: 0 0 12px #00f0ff, inset 0 0 10px #00f0ff; opacity: 0.65; }
         100% { transform: scale(1.03); box-shadow: 0 0 25px #00f0ff, inset 0 0 18px #00f0ff; opacity: 1; }
     }
-
-    /* Cyber News Feed Box Container */
-    .news-panel {
-        background-color: #15191e;
-        border: 1px solid #ff3333;
-        border-radius: 5px;
-        padding: 10px;
-        box-shadow: 0 0 10px rgba(255, 51, 51, 0.2);
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -129,13 +120,13 @@ tab_chat, tab_scanner, tab_live = st.tabs([
 # ====================================================
 with tab_chat:
     
-    # Create a layout grid: Left column for Map & Chat, Right column for Core & News Info
+    # Create a layout grid: Left column for Map, Right column for Live Video Feed & Core Matrix
     col_left, col_right = st.columns([2, 1])
     
     with col_left:
         st.markdown("<h2 style='color: #00f0ff; margin-bottom: 0;'>🛰️ GLOBAL THREAT TELEMETRY MAP</h2>", unsafe_allow_html=True)
         
-        # Simulated Geolocation coordinate mapping data matrix (Centered near your operating region)
+        # Geolocation coordinate mapping data matrix 
         map_data = {
             'lat': [8.5241, 8.5400, 8.5000],
             'lon': [76.9366, 76.9000, 76.9600]
@@ -143,30 +134,17 @@ with tab_chat:
         st.map(map_data, zoom=11, use_container_width=True)
         
     with col_right:
-        # Top Right: Interactive Intelligence News Channel Feed Terminal
-        st.markdown("""
-            <div class='news-panel'>
-                <h4 style='color: #ff3333; margin-top:0; margin-bottom:5px;'>🚨 INTEL NEWS CHANNELS</h4>
-                <p style='font-size: 11px; color: #ffffff; margin: 2px 0;'>⚠️ <b>[GLOBAL]</b> Zero-day exploit patch pushed to main Linux server hubs.</p>
-                <p style='font-size: 11px; color: #ffffff; margin: 2px 0;'>🛑 <b>[LOCAL]</b> Subnet sweep flagged 0 malicious intercept arrays.</p>
-                <p style='font-size: 11px; color: #ffffff; margin: 2px 0;'>⚡ <b>[VEXA]</b> Neural mainframe routing optimized on Python 3.12 layer.</p>
-            </div>
-        """, unsafe_allow_html=True)
+        # Top Right: Live Operations Intelligence Video Feed
+        st.markdown("<h4 style='color: #ff3333; margin-top:0; margin-bottom:10px;'>📡 LIVE INTEL FEED</h4>", unsafe_allow_html=True)
+        
+        # Embeds a live media news broadcast stream framework
+        st.video("https://www.youtube.com/watch?v=NX6w87qY0_M")  
+        
+        st.markdown("---")
         
         # Mid Right: The glowing AI power matrix animation
         st.markdown('<div class="vexa-core"></div>', unsafe_allow_html=True)
         st.markdown("<p style='text-align: center; color: #00f0ff; font-weight: bold; font-size:12px;'>VEXA CORE MATRIX</p>", unsafe_allow_html=True)
-
-    st.write("---")
-    
-    # Voice intake node row
-    st.subheader("🎙️ Vexa Voice Terminal Intercom")
-    audio_command = st.audio_input("Initialize Vexa Audio Uplink")
-    
-    if audio_command:
-        st.info("⚡ Audio packet successfully intercepted by Vexa.")
-        audio_bytes = audio_command.read()
-        st.warning("🤖 Audio data buffered! Link a Cloud API Key to stream voice conversions natively.")
 
     st.write("---")
     st.subheader("💬 Tactical Text Terminal")
@@ -200,12 +178,14 @@ with tab_chat:
                     full_system_prompt = f"You are Vexa, a highly advanced cybernetic defense intelligence system. Context:\n{context_text}"
                     actual_reply = ai.predict(f"{full_system_prompt}\n\nUser Question: {user_prompt}")
                 except Exception:
-                    # Adaptive cloud environment fallback string
+                    # Adaptive environment fallback string
                     actual_reply = f"Neural pipeline online. Processing: '{user_prompt}'. Standby for deep system vector integration."
             
             response_placeholder.write(actual_reply)
             
         st.session_state.messages.append({"role": "assistant", "content": actual_reply})
+        
+        # Keep browser-based text-to-speech so she answers out loud
         vexa_speak(actual_reply)
 
 # ====================================================
