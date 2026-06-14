@@ -40,7 +40,7 @@ st.markdown("""
     /* Vexa Neon Active Buttons */
     div.stButton > button:first-child {
         background-color: #00f0ff !important;
-        color: #0d0f12 !important;
+        color: #0d0d12 !important;
         font-weight: bold;
         border: none;
         border-radius: 4px;
@@ -120,11 +120,11 @@ tab_chat, tab_scanner, tab_live = st.tabs([
 # ====================================================
 with tab_chat:
     
-    # AUTOPLAY AUDIO BRIDGE: A tactical warning banner that un-mutes browser audio streams upon user dismissal interaction
+    # Audio sync toast interaction anchor
     st.toast("⚡ **Intel Audio Sync:** Click anywhere on the dashboard interface to synchronize live audio feeds.", icon="🔊")
     
-    # Layout configuration ratios to expand the video monitor real estate footprint
-    col_left, col_right = st.columns([1.4, 1.6])
+    # Perfectly balanced [1, 1] grid alignment setup
+    col_left, col_right = st.columns([1, 1])
     
     with col_left:
         st.markdown("<h2 style='color: #00f0ff; margin-bottom: 0;'>🛰️ GLOBAL THREAT MAP</h2>", unsafe_allow_html=True)
@@ -140,13 +140,14 @@ with tab_chat:
         st.markdown("<h4 style='color: #ff3333; margin-top:0; margin-bottom:5px;'>📡 LIVE INTEL MONITOR</h4>", unsafe_allow_html=True)
         
         # Complete collection of all requested YouTube news live channels
+        # MODIFIED: Added ABC 7 New York Live to the operational matrix dictionary
         news_channels = {
             "24 News Live (Malayalam)": "https://www.youtube.com/watch?v=1wECsnGZcfc",
-            "ABC News Live": "https://www.youtube.com/watch?v=kQXggaqbAUQ",
+            "ABC 7 New York Live": "https://www.youtube.com/watch?v=VrhYz4CL70I",
+            "ABC News Live": "https://www.youtube.com/watch?v=iipR5yUp36o",
             "Al Jazeera English Live": "https://www.youtube.com/watch?v=gCNeDWCI0vo",
             "Asianet News Live (Malayalam)": "https://www.youtube.com/watch?v=s0LLVQeMmtU",
             "DW News Live": "https://www.youtube.com/watch?v=v76P9T_tHfk",
-            "Fox News (Highlights/Live)": "https://www.youtube.com/watch?v=NX6w87qY0_M",
             "France 24 English Live": "https://www.youtube.com/watch?v=HvZt-nh9sGg",
             "LiveNOW from FOX": "https://www.youtube.com/watch?v=C96oohpWBGw",
             "Manorama News Live (Malayalam)": "https://www.youtube.com/watch?v=tgBTspqA5nY",
@@ -157,14 +158,14 @@ with tab_chat:
             "WION Live News": "https://www.youtube.com/watch?v=vfszY1JYbMc"
         }
         
-        # Scrollable dropdown drawer selection mechanism
+        # Dropdown selection transponder element
         selected_channel = st.selectbox(
             "Select Intel Transponder Route:",
             options=list(news_channels.keys()),
             label_visibility="collapsed"
         )
         
-        # Stream elements immediately engage and track stream data upon environment initialization 
+        # Live video component with native autoplay protocol enabled
         st.video(news_channels[selected_channel], autoplay=True)  
         
         st.markdown("---")
@@ -197,7 +198,6 @@ with tab_chat:
             response_placeholder = st.empty()
             with st.spinner("Vexa parsing core database logs..."):
                 try:
-                    # Dynamically call your real local processing brain
                     from brain import ai, vector_store
                     context_docs = vector_store.similarity_search(user_prompt, k=2)
                     context_text = "\n".join([doc.page_content for doc in context_docs])
@@ -205,14 +205,11 @@ with tab_chat:
                     full_system_prompt = f"You are Vexa, a highly advanced cybernetic defense intelligence system. Context:\n{context_text}"
                     actual_reply = ai.predict(f"{full_system_prompt}\n\nUser Question: {user_prompt}")
                 except Exception:
-                    # Adaptive environment fallback string
                     actual_reply = f"Neural pipeline online. Processing: '{user_prompt}'. Standby for deep system vector integration."
             
             response_placeholder.write(actual_reply)
             
         st.session_state.messages.append({"role": "assistant", "content": actual_reply})
-        
-        # Keep browser-based text-to-speech so she answers out loud
         vexa_speak(actual_reply)
 
 # ====================================================
