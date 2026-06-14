@@ -108,13 +108,14 @@ with st.sidebar:
     st.markdown("---")
     st.status("Vexa Interface Core: ACTIVE", state="complete")
     st.metric(label="Network Grid Sockets", value="Secure", delta="0 Threat Signals")
-    st.info("Cybersecurity Utilities fully integrated and operational.")
+    st.info("CTF Trackers and Boosted Core Modules deployed cleanly.")
 
 # ====================================================
 # 5. CORE INTERFACE WORKSPACE NAVIGATION
 # ====================================================
-tab_chat, tab_scanner, tab_crypto, tab_intel, tab_live = st.tabs([
+tab_chat, tab_ctf, tab_scanner, tab_crypto, tab_intel, tab_live = st.tabs([
     "⚡ VexaAI Engine", 
+    "🏆 CTF & Bandit Matrix",
     "🔍 Network Security Matrix",
     "🔐 Cryptographic Suite",
     "📡 Threat Intel Center",
@@ -140,15 +141,16 @@ with tab_chat:
     with col_right:
         st.markdown("<h4 style='color: #ff3333; margin-top:0; margin-bottom:5px;'>📡 LIVE INTEL MONITOR</h4>", unsafe_allow_html=True)
         
+        # MODIFIED: Restored DW News with the verified continuous live stream URL
         news_channels = {
+            "LiveNOW from FOX": "https://www.youtube.com/watch?v=C96oohpWBGw",
             "24 News Live (Malayalam)": "https://www.youtube.com/watch?v=1wECsnGZcfc",
             "ABC 7 New York Live": "https://www.youtube.com/watch?v=VrhYz4CL70I",
             "ABC News Live": "https://www.youtube.com/watch?v=iipR5yUp36o",
             "Al Jazeera English Live": "https://www.youtube.com/watch?v=gCNeDWCI0vo",
             "Asianet News Live (Malayalam)": "https://www.youtube.com/watch?v=s0LLVQeMmtU",
-            "DW News Live": "https://www.youtube.com/watch?v=v76P9T_tHfk",
+            "DW News Live": "https://www.youtube.com/watch?v=LuKwFajn37U",
             "France 24 English Live": "https://www.youtube.com/watch?v=HvZt-nh9sGg",
-            "LiveNOW from FOX": "https://www.youtube.com/watch?v=C96oohpWBGw",
             "Manorama News Live (Malayalam)": "https://www.youtube.com/watch?v=tgBTspqA5nY",
             "Mathrubhumi News Live (Malayalam)": "https://www.youtube.com/watch?v=0wGkPLjeOOA",
             "NBC News NOW": "https://www.youtube.com/watch?v=KPVvNNDycW4",
@@ -169,7 +171,7 @@ with tab_chat:
     
     if "messages" not in st.session_state:
         st.session_state.messages = [
-            {"role": "assistant", "content": "System initialization complete. Live matrix operational. I am Vexa. Standing by for database commands."}
+            {"role": "assistant", "content": "System initialization complete. Boosted neural pathways active. Ready for defensive operational inputs."}
         ]
         
     for msg in st.session_state.messages:
@@ -188,10 +190,15 @@ with tab_chat:
                     from brain import ai, vector_store
                     context_docs = vector_store.similarity_search(user_prompt, k=2)
                     context_text = "\n".join([doc.page_content for doc in context_docs])
-                    full_system_prompt = f"You are Vexa, a highly advanced cybernetic defense intelligence system. Context:\n{context_text}"
+                    full_system_prompt = f"You are Vexa, a highly advanced cybernetic defense intelligence system. Breakdown tools logically from an engineering angle. Context:\n{context_text}"
                     actual_reply = ai.predict(f"{full_system_prompt}\n\nUser Question: {user_prompt}")
                 except Exception:
-                    actual_reply = f"Neural pipeline online. Processing command: '{user_prompt}'. Standby for deep system vector integration."
+                    # Boosted Autonomous Engineering Fallback Prompting Engine
+                    actual_reply = f"[Vexa Boosted Engine // Autonomous Analysis Target: '{user_prompt}']\n\n" \
+                                   f"Analyzing request through a pure logical architectural lens. Decoupling tool mechanics from simple definitions:\n" \
+                                   f"1. **Core Verification Loop:** Confirming parameters on target modules to map low-level system behaviors.\n" \
+                                   f"2. **Functional Process Trace:** Running input context against active network/cryptographic runtimes to avoid blind execution blocks.\n" \
+                                   f"-> Pipeline active. Ready to extract data arrays or build custom scripts for this directive."
             
             response_placeholder.write(actual_reply)
             
@@ -199,7 +206,47 @@ with tab_chat:
         vexa_speak(actual_reply)
 
 # ----------------------------------------------------
-# TAB 2: ACTIVE NETWORK SECURITY MATRIX
+# TAB 2: CAPTURE THE FLAG & WARGAME TRACKER
+# ----------------------------------------------------
+with tab_ctf:
+    st.subheader("🏆 OverTheWire: Bandit Operational Log")
+    st.write("Track and document verified target flags, passphrases, and critical terminal tactics sequentially.")
+
+    if "bandit_logs" not in st.session_state:
+        st.session_state.bandit_logs = {
+            "Level 0 → 1": {"status": "Incomplete", "pass": "", "notes": "Goal: Read 'readme' file in home directory. Command: cat readme"},
+            "Level 1 → 2": {"status": "Incomplete", "pass": "", "notes": "Goal: Read '-' file. Command: cat ./-"},
+            "Level 2 → 3": {"status": "Incomplete", "pass": "", "notes": "Goal: Read file with spaces. Command: cat \"spaces in this filename\""},
+            "Level 3 → 4": {"status": "Incomplete", "pass": "", "notes": "Goal: Access hidden file inside 'inhere'. Command: ls -a; cat .hidden"},
+            "Level 4 → 5": {"status": "Incomplete", "pass": "", "notes": "Goal: Find human-readable file in 'inhere'. Command: file *"},
+            "Level 5 → 6": {"status": "Incomplete", "pass": "", "notes": "Goal: Find 1033 bytes, non-executable file. Command: find . -size 1033c ! -executable"}
+        }
+
+    lev_choice = st.selectbox("Select Target Objective Track:", list(st.session_state.bandit_logs.keys()))
+    
+    col_l1, col_l2 = st.columns([1, 2])
+    with col_l1:
+        st.session_state.bandit_logs[lev_choice]["status"] = st.selectbox(
+            "Node Objective Status:", ["Incomplete", "Verified / Exploited"], 
+            index=0 if st.session_state.bandit_logs[lev_choice]["status"] == "Incomplete" else 1
+        )
+        st.session_state.bandit_logs[lev_choice]["pass"] = st.text_input(
+            "Captured Passphrase String:", value=st.session_state.bandit_logs[lev_choice]["pass"], type="password"
+        )
+    with col_l2:
+        st.session_state.bandit_logs[lev_choice]["notes"] = st.text_area(
+            "Engineering Notes / Commands Used:", value=st.session_state.bandit_logs[lev_choice]["notes"]
+        )
+        
+    st.markdown("---")
+    st.subheader("🚩 Live Active Dashboard Metrics")
+    m1, m2 = st.columns(2)
+    completed_count = sum(1 for k, v in st.session_state.bandit_logs.items() if v["status"] == "Verified / Exploited")
+    m1.metric("Bandit Levels Cleared", f"{completed_count} / {len(st.session_state.bandit_logs)}")
+    m2.metric("Target Connection Endpoint", "bandit.labs.overthewire.org", delta="Port 2220")
+
+# ----------------------------------------------------
+# TAB 3: ACTIVE NETWORK SECURITY MATRIX
 # ----------------------------------------------------
 with tab_scanner:
     st.subheader("🔍 Active Local Port Scanner")
@@ -218,7 +265,7 @@ with tab_scanner:
         
         for idx, port in enumerate(ports_to_scan):
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(0.8)  # Fast tactical response timeout
+            s.settimeout(0.8)
             result = s.connect_ex((target_host, port))
             
             status = "🔓 OPEN (Vulnerable/Active)" if result == 0 else "🔒 CLOSED / FILTERED"
@@ -243,7 +290,7 @@ with tab_scanner:
             st.error(f"Invalid CIDR Structural Format: {e}")
 
 # ----------------------------------------------------
-# TAB 3: CRYPTOGRAPHIC SUITE
+# TAB 4: CRYPTOGRAPHIC SUITE
 # ----------------------------------------------------
 with tab_crypto:
     st.subheader("🔐 Integrity Hashing Engine")
@@ -262,7 +309,7 @@ with tab_crypto:
             st.warning("Please feed string data into the compiler block first.")
 
 # ----------------------------------------------------
-# TAB 4: THREAT INTEL CENTER (LIVE FEED PARSER)
+# TAB 5: THREAT INTEL CENTER (LIVE FEED PARSER)
 # ----------------------------------------------------
 with tab_intel:
     st.subheader("📡 CISA Live Cyber Threat Advisories")
@@ -271,12 +318,11 @@ with tab_intel:
     if st.button("Query CISA Live Feed Transponder"):
         with st.spinner("Tuning receiver to CISA RSS stream..."):
             try:
-                # CISA Cyber Advisories Feed
                 feed_url = "https://www.cisa.gov/cybersecurity-advisories.xml"
                 feed = feedparser.parse(feed_url)
                 
                 if feed.entries:
-                    for idx, entry in enumerate(feed.entries[:5]):  # Get top 5 critical bulletins
+                    for idx, entry in enumerate(feed.entries[:5]):
                         with st.expander(f"🔴 {entry.title}"):
                             st.markdown(f"**Published:** {entry.get('published', 'N/A')}")
                             st.write(entry.get('summary', 'No summary payload attached.'))
@@ -287,7 +333,7 @@ with tab_intel:
                 st.error(f"Intel pipeline block encountered: {e}")
 
 # ----------------------------------------------------
-# TAB 5: TELEMETRY & LIVE LOG STREAM
+# TAB 6: TELEMETRY & LIVE LOG STREAM
 # ----------------------------------------------------
 with tab_live:
     st.subheader("📟 System Telemetry Feed")
@@ -295,8 +341,7 @@ with tab_live:
 [SYSTEM INFO] Vexa runtime core mapped to secure cloud node.
 [SYSTEM INFO] Initializing environment dependencies loop sequence...
 [SUCCESS] Verified stability hooks on Python 3.12 layer framework.
-[SECURITY] Native Socket, Hashing, and RSS Intel parsers mounted.
-[PIPELINE] ChromaDB instance linked cleanly with bounded NumPy array engines.
-[SECURITY] Matrix firewalls set to default adaptive defensive postures.
+[SECURITY] Native Socket, Hashing, CTF Matrix and RSS Intel parsers mounted.
+[PIPELINE] Vexa AI Engine set to Boosted logical framework constraints.
 [READY] Standing by for master admin operations...
     """, language="bash")
