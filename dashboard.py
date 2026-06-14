@@ -149,6 +149,58 @@ with tab_chat:
     
     # Setup session chat history container arrays if empty
     if "messages" not in st.session_state:
-        [SECURITY] Matrix firewalls set to default adaptive defensive postures.
+        st.session_state.messages = [
+            {"role": "assistant", "content": "System initialization complete. I am Vexa. Standing by for administrative input."}
+        ]
+        
+    # Render historical log frames onto UI
+    for msg in st.session_state.messages:
+        with st.chat_message(msg["role"]):
+            st.write(msg["content"])
+            
+    # Capture fresh input string fields
+    if user_prompt := st.chat_input("Input encryption string..."):
+        with st.chat_message("user"):
+            st.write(user_prompt)
+        st.session_state.messages.append({"role": "user", "content": user_prompt})
+        
+        # Simulated response wrapper
+        with st.chat_message("assistant"):
+            response_placeholder = st.empty()
+            mock_reply = f"Acknowledged request: '{user_prompt}'. Processing algorithmic security pipelines."
+            response_placeholder.write(mock_reply)
+            
+        st.session_state.messages.append({"role": "assistant", "content": mock_reply})
+        
+        # Fire voice protocol sequence instantly
+        vexa_speak(mock_reply)
+
+# ====================================================
+# TAB 2: DEFENSIVE CORE NETWORK SCANNER
+# ====================================================
+with tab_scanner:
+    st.subheader("🔍 Local Network Socket Inspector")
+    st.write("Diagnostic utility tools for assessing connected local node assets.")
+    
+    if st.button("Trigger Grid Network Analysis Scan"):
+        with st.spinner("Broadcasting scanner packets across subnets..."):
+            st.success("Internal grid sweep finished cleanly.")
+            st.dataframe({
+                "Local Asset IP": ["192.168.1.1", "192.168.1.45", "192.168.1.102"],
+                "Hardware Type": ["Gateway Router", "Linux Host Node", "Workstation Frame"],
+                "Socket Integrity": ["Protected", "Inspecting", "Protected"]
+            })
+
+# ====================================================
+# TAB 3: TELEMETRY & LIVE LOG STREAM
+# ====================================================
+with tab_live:
+    st.subheader("📟 System Telemetry Feed")
+    st.code("""
+[SYSTEM INFO] Vexa runtime core mapped to secure cloud node.
+[SYSTEM INFO] Initializing environment dependencies loop sequence...
+[SUCCESS] Verified stability hooks on Python 3.12 layer framework.
+[PIPELINE] ChromaDB instance linked cleanly with bounded NumPy array engines.
+[SECURITY] Matrix firewalls set to default adaptive defensive postures.
 [READY] Standing by for master admin operations...
     """, language="bash")
