@@ -76,11 +76,12 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ====================================================
-# 3. NATIVE VOICE SYNTHESIS DISPATCH (JS TTS HOOK)
+# 3. HIGH-PERFORMANCE ZERO-CRASH SPEECH CORE
 # ====================================================
 def vexa_speak(text):
-    """Executes native browser JavaScript to stream structural audio responses out loud as Vexa."""
+    """Utilizes native browser-level hardware acceleration for 100% free speech generation."""
     if text:
+        # Sanitize formatting strings safely to protect Javascript runtime
         clean_text = text.replace('"', '\\"').replace('\n', ' ')
         js_speech = f"""
         <script>
@@ -88,13 +89,12 @@ def vexa_speak(text):
             window.speechSynthesis.cancel(); 
             var voices = window.speechSynthesis.getVoices();
             for(var i = 0; i < voices.length; i++) {{
-                if(voices[i].name.includes("Google UK English Female") || voices[i].name.includes("Zira") || voices[i].name.includes("Female")) {{
+                if(voices[i].name.includes("Google UK English Female") || voices[i].name.includes("Female")) {{
                     msg.voice = voices[i];
                     break;
                 }}
             }}
-            msg.rate = 1.05; 
-            msg.pitch = 1.0;  
+            msg.rate = 1.05;
             window.speechSynthesis.speak(msg);
         </script>
         """
@@ -108,7 +108,7 @@ with st.sidebar:
     st.markdown("---")
     st.status("Vexa Interface Core: ACTIVE", state="complete")
     st.metric(label="Network Grid Sockets", value="Secure", delta="0 Threat Signals")
-    st.info("CTF Trackers and Boosted Core Modules deployed cleanly.")
+    st.success("🗣️ Voice Engine: Browser Safe Mode")
 
 # ====================================================
 # 5. CORE INTERFACE WORKSPACE NAVIGATION
@@ -126,8 +126,6 @@ tab_chat, tab_ctf, tab_scanner, tab_crypto, tab_intel, tab_live = st.tabs([
 # TAB 1: VEXA AI INTERACTION TERMINAL (DYNAMIC GRID)
 # ----------------------------------------------------
 with tab_chat:
-    st.toast("⚡ **Intel Audio Sync:** Click anywhere on the dashboard interface to synchronize live audio feeds.", icon="🔊")
-    
     col_left, col_right = st.columns([1, 1])
     
     with col_left:
@@ -141,7 +139,6 @@ with tab_chat:
     with col_right:
         st.markdown("<h4 style='color: #ff3333; margin-top:0; margin-bottom:5px;'>📡 LIVE INTEL MONITOR</h4>", unsafe_allow_html=True)
         
-        # MODIFIED: Restored DW News with the verified continuous live stream URL
         news_channels = {
             "LiveNOW from FOX": "https://www.youtube.com/watch?v=C96oohpWBGw",
             "24 News Live (Malayalam)": "https://www.youtube.com/watch?v=1wECsnGZcfc",
@@ -190,10 +187,9 @@ with tab_chat:
                     from brain import ai, vector_store
                     context_docs = vector_store.similarity_search(user_prompt, k=2)
                     context_text = "\n".join([doc.page_content for doc in context_docs])
-                    full_system_prompt = f"You are Vexa, a highly advanced cybernetic defense intelligence system. Breakdown tools logically from an engineering angle. Context:\n{context_text}"
+                    full_system_prompt = f"You are Vexa, an advanced cybernetic defense intelligence system. Breakdown tools logically from an engineering angle. Context:\n{context_text}"
                     actual_reply = ai.predict(f"{full_system_prompt}\n\nUser Question: {user_prompt}")
                 except Exception:
-                    # Boosted Autonomous Engineering Fallback Prompting Engine
                     actual_reply = f"[Vexa Boosted Engine // Autonomous Analysis Target: '{user_prompt}']\n\n" \
                                    f"Analyzing request through a pure logical architectural lens. Decoupling tool mechanics from simple definitions:\n" \
                                    f"1. **Core Verification Loop:** Confirming parameters on target modules to map low-level system behaviors.\n" \
@@ -343,5 +339,6 @@ with tab_live:
 [SUCCESS] Verified stability hooks on Python 3.12 layer framework.
 [SECURITY] Native Socket, Hashing, CTF Matrix and RSS Intel parsers mounted.
 [PIPELINE] Vexa AI Engine set to Boosted logical framework constraints.
+[VOICE INTEGRATION] Free, zero-overhead browser hardware synthesis engine online.
 [READY] Standing by for master admin operations...
     """, language="bash")
