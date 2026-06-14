@@ -120,11 +120,14 @@ tab_chat, tab_scanner, tab_live = st.tabs([
 # ====================================================
 with tab_chat:
     
-    # Create a layout grid: Left column for Map, Right column for Live Video Selector & Core Matrix
-    col_left, col_right = st.columns([2, 1])
+    # AUTOPLAY AUDIO BRIDGE: A tactical warning banner that un-mutes browser audio streams upon user dismissal interaction
+    st.toast("⚡ **Intel Audio Sync:** Click anywhere on the dashboard interface to synchronize live audio feeds.", icon="🔊")
+    
+    # Layout configuration ratios to expand the video monitor real estate footprint
+    col_left, col_right = st.columns([1.4, 1.6])
     
     with col_left:
-        st.markdown("<h2 style='color: #00f0ff; margin-bottom: 0;'>🛰️ GLOBAL THREAT TELEMETRY MAP</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='color: #00f0ff; margin-bottom: 0;'>🛰️ GLOBAL THREAT MAP</h2>", unsafe_allow_html=True)
         
         # Geolocation coordinate mapping data matrix 
         map_data = {
@@ -161,8 +164,8 @@ with tab_chat:
             label_visibility="collapsed"
         )
         
-        # Renders the live media container frame mapped to the chosen stream channel asset
-        st.video(news_channels[selected_channel])  
+        # Stream elements immediately engage and track stream data upon environment initialization 
+        st.video(news_channels[selected_channel], autoplay=True)  
         
         st.markdown("---")
         
