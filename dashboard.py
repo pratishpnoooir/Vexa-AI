@@ -1,36 +1,24 @@
 import streamlit as st
-
-# Check if authentication is even enabled/available
-if hasattr(st, "user"):
-    if not st.user.is_logged_in:
-        st.title("⚡ VexaAI Access Restricted")
-        if st.button("Authenticate via Google"): 
-            st.login("google")
-        st.stop()
-else:
-    # Fallback for local development or environments without auth enabled
-    st.sidebar.info("Developer Mode: Authentication Disabled")
-
-
-
-
 import os, socket, ipaddress, hashlib, feedparser, requests, pandas as pd
 import pydeck as pdk
 import subprocess, platform
 
 # ====================================================
-# 1. INITIAL SYSTEM & CONFIGURATION
+# 1. INITIAL SYSTEM CONFIGURATION
 # ====================================================
 st.set_page_config(page_title="VexaAI Command Center", page_icon="⚡", layout="wide")
 
-# --- AUTH GATE ---
-if not st.user.is_logged_in:
-    st.title("⚡ VexaAI Access Restricted")
-    if st.button("Authenticate via Google"): st.login("google")
-    st.stop()
+# Safe Auth Gate: Prevents AttributeError if Auth is not configured
+if hasattr(st, "user"):
+    if not st.user.is_logged_in:
+        st.title("⚡ VexaAI Access Restricted")
+        if st.button("Authenticate via Google"): st.login("google")
+        st.stop()
+else:
+    st.sidebar.info("Dev Mode: Authentication disabled.")
 
 # ====================================================
-# 2. VEXA THEME ENGINE (Your CSS)
+# 2. VEXA THEME ENGINE (Custom CSS)
 # ====================================================
 st.markdown("""
     <style>
@@ -64,7 +52,7 @@ def get_weather():
 # 4. TABS INTEGRATION
 # ====================================================
 tab_chat, tab_ctf, tab_scanner, tab_crypto, tab_intel, tab_live = st.tabs([
-    "⚡ VexaAI Engine", "🏆 Bandit Matrix", "🔍 Recon", "🔐 Crypto", "📡 Threat Intel", "📺 Live News"
+    "⚡ VexaAI Engine", "🏆 Bandit Matrix", "🔍 Network Recon", "🔐 Crypto", "📡 Threat Intel", "📺 Live News"
 ])
 
 with tab_chat:
@@ -94,6 +82,7 @@ with tab_intel:
 
 with tab_live:
     st.subheader("📺 YouTube Live Intel")
+    # Replace channel_id with your desired source
     yt_rss = "https://www.youtube.com/feeds/videos.xml?channel_id=UC_x5XG1OV2P6uZZ5FSM9Ttw"
     for entry in feedparser.parse(yt_rss).entries[:3]:
         st.video(entry.link)
