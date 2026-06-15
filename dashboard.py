@@ -1,4 +1,19 @@
 import streamlit as st
+
+# Check if authentication is even enabled/available
+if hasattr(st, "user"):
+    if not st.user.is_logged_in:
+        st.title("⚡ VexaAI Access Restricted")
+        if st.button("Authenticate via Google"): 
+            st.login("google")
+        st.stop()
+else:
+    # Fallback for local development or environments without auth enabled
+    st.sidebar.info("Developer Mode: Authentication Disabled")
+
+
+
+
 import os, socket, ipaddress, hashlib, feedparser, requests, pandas as pd
 import pydeck as pdk
 import subprocess, platform
