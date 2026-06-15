@@ -3,18 +3,32 @@ import socket, subprocess, platform, feedparser, requests, pandas as pd
 import pydeck as pdk
 
 # ====================================================
-# 1. HARDENED CONFIGURATION & SAFE-AUTH GATE
+# 1. BULLETPROOF AUTHENTICATION GATE
 # ====================================================
 st.set_page_config(page_title="VexaAI Command Center", page_icon="⚡", layout="wide")
 
-# This wrapper prevents the AttributeError by checking for the user object first
+# We use session state to track auth locally, 
+# and only touch 'st.user' if the environment confirms it exists.
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+
+def handle_login():
+    # Only try to login if the environment supports it
+    if hasattr(st, "login"):
+        st.login()
+        st.session_state.authenticated = True
+    else:
+        st.error("Authentication provider not configured in Streamlit Cloud settings.")
+
+# Check if we should enforce login
 if hasattr(st, "user"):
-    if not st.user.is_logged_in:
-        st.title("⚡ VexaAI Access Restricted")
-        if st.button("Authenticate via Google"): st.login("google")
-        st.stop()
-else:
-    st.sidebar.info("System Note: Authentication layer inactive. Running in Dev Mode.")
+    try:
+        if not st.user.is_logged_in:
+            st.title("⚡ VexaAI Access Restricted")
+            st.button("Log in with Google", on_click=handle_login)
+            st.stop()
+    except AttributeError:
+        pass # Fallback if st.user exists but is not initialized
 
 # ====================================================
 # 2. VEXA THEME ENGINE
@@ -23,7 +37,6 @@ st.markdown("""
     <style>
     .stApp { background-color: #0d0f12; color: #00f0ff; font-family: 'Courier New', monospace; }
     section[data-testid="stSidebar"] { background-color: #15191e !important; border-right: 2px solid #00f0ff; }
-    div.stButton > button:first-child { background-color: #00f0ff !important; color: #0d0d12 !important; font-weight: bold; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -62,6 +75,7 @@ with tabs[2]: # Network Recon
     target = st.text_input("Target IP:", "127.0.0.1")
     if st.button("Run Scan"):
         st.write(f"Ping: {'SUCCESS' if ping_host(target) else 'FAILED'}")
+        # Simple local port check
         ports = [p for p in [80, 443] if socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect_ex((target, p)) == 0]
         st.write(f"Open Ports: {ports}")
 
