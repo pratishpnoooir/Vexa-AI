@@ -1,4 +1,5 @@
 streamlit>=1.42.0
+streamlit-player
 langchain-core
 langchain-text-splitters
 langchain-ollama
