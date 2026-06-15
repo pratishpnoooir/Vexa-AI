@@ -4,80 +4,83 @@ import ipaddress
 import hashlib
 import feedparser
 import concurrent.futures
+from streamlit_player import st_player
 from datetime import datetime
 
-# --- CONFIGURATION ---
-st.set_page_config(page_title="VexaAI Command Center", layout="wide", page_icon="⚡")
+# ==========================================
+# 1. CORE CONFIGURATION & STYLING
+# ==========================================
+st.set_page_config(page_title="VexaAI Command Centre", layout="wide")
 
-# --- CUSTOM CSS ENGINE ---
 st.markdown("""
     <style>
-    .stApp { background-color: #05070a; color: #00f0ff; font-family: 'Courier New', monospace; }
-    .vexa-scanline { width: 100%; height: 2px; background: #00f0ff; box-shadow: 0 0 10px #00f0ff; animation: scan 4s linear infinite; }
-    @keyframes scan { from { margin-top: 0; } to { margin-top: 50vh; } }
-    div.stButton > button { background-color: #1a1f26; color: #00f0ff; border: 1px solid #00f0ff; }
+    .stApp { background-color: #0d0f12; color: #00f0ff; font-family: 'Courier New', monospace; }
+    .vexa-core { width: 100px; height: 100px; border: 3px solid #00f0ff; border-radius: 50%; 
+                 margin: 20px auto; box-shadow: 0 0 20px #00f0ff; animation: pulse 2s infinite; }
+    @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.7; } 100% { transform: scale(1.05); opacity: 1; } }
     </style>
 """, unsafe_allow_html=True)
 
-# --- SECURITY LOGIC MODULES ---
-def check_port(target, port):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.settimeout(0.5)
-        return port if s.connect_ex((target, port)) == 0 else None
+# ==========================================
+# 2. VEXA ENGINE FUNCTIONS
+# ==========================================
+def scan_port(target, port):
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(0.5)
+            if s.connect_ex((target, port)) == 0:
+                return port
+    except: pass
+    return None
 
-# --- SIDEBAR CONTROL ---
-with st.sidebar:
-    st.title("⚡ Vexa System")
-    st.info(f"Time: {datetime.now().strftime('%H:%M:%S')}")
-    st.status("Security Protocols: ENCRYPTED", state="complete")
-    
-# --- MAIN TABS ---
-tab_chat, tab_scan, tab_intel = st.tabs(["🤖 Vexa Intelligence", "🔍 Network Security", "📡 Global Threat Intel"])
+# ==========================================
+# 3. INTERFACE ARCHITECTURE
+# ==========================================
+tab_chat, tab_ctf, tab_scanner, tab_crypto, tab_intel, tab_live = st.tabs([
+    "⚡ VexaAI Engine", "🏆 CTF Matrix", "🔍 Network Matrix", 
+    "🔐 Crypto Suite", "📡 Threat Intel", "📟 Live Feed"
+])
 
-with tab_scan:
-    st.subheader("Multi-threaded TCP Port Scanner")
-    target = st.text_input("Target Host", "127.0.0.1")
-    ports = [21, 22, 23, 25, 53, 80, 443, 3306, 8080]
-    
-    if st.button("Execute Deep Scan"):
-        with st.spinner("Analyzing target nodes..."):
-            with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-                results = list(executor.map(lambda p: check_port(target, p), ports))
-            
-            open_ports = [p for p in results if p is not None]
-            for port in open_ports:
-                st.warning(f"ALERT: Port {port} is OPEN on {target}")
+with tab_chat:
+    st.header("Vexa Operational AI")
+    st.markdown('<div class="vexa-core"></div>', unsafe_allow_html=True)
+    if prompt := st.chat_input("Inject Command..."):
+        st.chat_message("user").write(prompt)
+        st.chat_message("assistant").write("Vexa // Logic Gate Override: Analysis of " + prompt + " initiated.")
+
+with tab_scanner:
+    st.header("Network Security Matrix")
+    target = st.text_input("Host Target:", "127.0.0.1")
+    if st.button("Initiate Multi-Threaded Scan"):
+        ports = [21, 22, 80, 443, 8080, 8443]
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            results = list(executor.map(lambda p: scan_port(target, p), ports))
+        for p in [r for r in results if r]:
+            st.warning(f"SECURITY ALERT: Port {p} is OPEN/Vulnerable.")
+
+with tab_crypto:
+    st.header("Cryptographic Integrity Engine")
+    data = st.text_area("Payload Data:")
+    algo = st.selectbox("Algorithm:", ["SHA-256", "MD5"])
+    if st.button("Execute Hash"):
+        h = hashlib.sha256(data.encode()).hexdigest() if algo == "SHA-256" else hashlib.md5(data.encode()).hexdigest()
+        st.code(f"Signature: {h}")
+
+with tab_live:
+    st.header("Live Tactical Media Feed")
+    col1, col2 = st.columns(2)
+    with col1:
+        # Example Live Stream Embed
+        st.subheader("Intel Stream: Sky News")
+        st_player("https://www.youtube.com/watch?v=YDvsBbKfLPA")
+    with col2:
+        st.subheader("Intel Stream: WION")
+        st_player("https://www.youtube.com/watch?v=vfszY1JYbMc")
 
 with tab_intel:
-    st.subheader("Live Cyber Security Feeds")
-    # You can add more security-focused feeds here
-    feeds = {
-        "CISA Advisories": "https://www.cisa.gov/cybersecurity-advisories.xml",
-        "The Hacker News": "https://feeds.feedburner.com/TheHackersNews"
-    }
-    
-    selected_feed = st.selectbox("Select Intel Source", list(feeds.keys()))
-    feed = feedparser.parse(feeds[selected_feed])
-    
+    st.header("CISA Advisory Feed")
+    feed = feedparser.parse("https://www.cisa.gov/cybersecurity-advisories.xml")
     for entry in feed.entries[:5]:
-        with st.expander(f"🔴 {entry.title}"):
+        with st.expander(entry.title):
             st.write(entry.summary)
-            st.link_button("View Source", entry.link)
-
-# --- VEXA AI INTERFACE ---
-with tab_chat:
-    st.markdown("<div class='vexa-scanline'></div>", unsafe_allow_html=True)
-    if "messages" not in st.session_state:
-        st.session_state.messages = [{"role": "assistant", "content": "Vexa Core Online. Awaiting input."}]
-    
-    for msg in st.session_state.messages:
-        with st.chat_message(msg["role"]):
-            st.write(msg["content"])
-            
-    if prompt := st.chat_input("Command Protocol..."):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("assistant"):
-            # Placeholder for your AI integration
-            response = f"Vexa processing: {prompt}. Analysis complete."
-            st.write(response)
-        st.session_state.messages.append({"role": "assistant", "content": response})
+            st.link_button("Details", entry.link)
